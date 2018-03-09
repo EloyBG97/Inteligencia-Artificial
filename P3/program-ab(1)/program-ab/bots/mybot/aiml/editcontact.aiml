@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- Regla MODIFICAR CONTACTO -->
+<category>
+	<pattern>^ [MODIFI+ EDIT+] ^ [CONTACTO AMIG+ COMPAÑER+ CONOCID+ COLEGA] ^</pattern>
+	
+	<template>
+	
+		<think>
+			<set name="topic">
+				EDITCONTACT
+			</set>MODIFICAR
+		</think>
+		
+		INTRODUZCA SUS APELLIDOS
+	</template>
+</category>
+
+<category>
+	<pattern>^ [CONTACTO AMIG+ COMPAÑER+ CONOCID+ COLEGA] ^ [MODIFIC+ EDIT+] ^</pattern>
+	
+	<template>
+		<srai>MODIFICAR CONTACTO</srai>
+	</template>
+</category>
+
+
+<!-- Topic MODIFICAR CONTACTO -->
+<topic name="EDITCONTACT">
+</topic>
+
+<category>
+	<pattern><set>apellido</set></pattern>
+	<that>INTRODUZCA SUS APELLIDOS</that>
+	<template>
+		<think>
+			<set name="contact">
+				<star/>
+			</set>
+		</think>
+	
+		QUE DESEA MODIFICAR, EL DOMICILIO O EL NUMERO DE TELEFONO
+	</template>
+</category>
+
+<category>
+	<pattern>*</pattern>
+	<that>QUE DESEA MODIFICAR, EL DOMICILIO O EL NUMERO DE TELEFONO</that>
+	<template>
+		<think>
+			<set var="aux">
+				<star/>
+			</set>
+		</think>
+		
+		<condition var="aux">
+			<li value="TELEFONO">
+				INTRODUZCA EL NUMERO DE TELEFONO
+			</li>
+			
+			<li value="DOMICILIO">
+				INTRODUZCA EL DOMICILIO
+			</li>
+			
+			<li>
+				ESTA INFORMACION NO EXISTE O NO SE PUEDE MODIFICAR
+			</li>
+		</condition>
+	</template>
+</category>
+
+<category>
+	<pattern>*</pattern>
+	<that>INTRODUZCA EL NUMERO DE TELEFONO</that>
+	<template>
+		<think>
+			<modifymap>
+				<name>telefono</name>
+				<key><get name="contact"/></key>
+				<value><star/></value>
+			</modifymap>
+			
+			<set name="topic">
+				unknow
+			</set>
+		</think>
+		
+		EL CONTACTO HA SIDO MODIFICADO CORRECTAMENTE
+		
+	</template>
+</category>
+
+
+<category>
+	<pattern>*</pattern>
+	<that>INTRODUZCA EL DOMICILIO</that>
+	<template>
+		<think>
+			<modifymap>
+				<name>direccion</name>
+				<key><get name="contact"/></key>
+				<value><star/></value>
+			</modifymap>
+			
+			<set name="topic">
+				unknow
+			</set>
+		</think>
+		
+		EL CONTACTO HA SIDO MODIFICADO CORRECTAMENTE
+		
+	</template>
+</category>
+</aiml>

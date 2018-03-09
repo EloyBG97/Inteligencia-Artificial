@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<category>
+<pattern>^ [BORR+ ELIMIN+] ^ [EVENTO CITA] ^</pattern>
+<template>
+	<think>
+		<set name="topic">
+			ERASEEVENT
+		</set>
+	</think>
+	INTRODUZCA LA FECHA DEL EVENTO
+</template>
+</category>
+
+<topic name="ERASEEVENT">
+
+<category>
+<pattern>*</pattern>
+<that>INTRODUZCA LA FECHA DEL EVENTO</that>
+<template>
+	<think>
+		<set name="date_event">
+			<srai>
+				ponerbarrabaja <srai>trata fecha <star/></srai>
+			</srai>
+		</set>
+	</think>
+	
+	<condition name="date_event">
+		<li value="0">INTRODUZCA LA FECHA</li>
+		<li>INTRODUZCA LA HORA</li>
+	</condition>
+</template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<that>INTRODUZCA LA HORA</that>
+<template>
+	<think>
+		<set name="time_event">
+			<srai>
+				ponerbarrabaja <srai>trata hora <star/></srai>
+			</srai>			
+		</set>
+	</think>
+	
+	<condition name="time_event">
+		<li value="0">INTRODUZCA LA HORA</li>
+		<li>	
+			<think>	
+				<set name="evento_set">
+					<srai>
+						ponerbarrabaja <get name="date_event"/> <get name="time_event"/>
+					</srai>
+				</set>
+				
+				<set var="cond">
+					<srai>
+						EXISTE EVENTO <get name="evento_set"/>
+					</srai>
+				</set>
+			</think>
+			
+			<srai>
+				EXISTE EVENTO <get set="evento_set"/>
+			</srai>
+			
+			<condition var="cond">
+				<li value="NO">NO TIENE EVENTO PARA ESA FECHA Y HORA</li>
+				<li value="YES">
+			
+					
+						<think>
+						<removefromset>
+							<name>eventos</name>
+							<key><get name="evento_set"/></key>
+						</removefromset>
+						</think>
+				
+						<set var="evento_map">
+							<map name="nombre_evento"><get name="date_event"/></map>
+						</set>
+				
+						<set var="hora_borar">
+							<map name="traduccion_hora"><get name="time_event"/></map>
+						</set>
+						
+						<think>
+						<set var="evento_map">
+							<srai>CHANGEITEM <get var="hora_borar"/> BY null IN <get var="evento_map"/></srai>
+						</set>
+						
+						<modifymap>
+							<name>nombre_evento</name>
+							<key><get name="date_event"/></key>
+							<value><get var="evento_map"/></value>
+						</modifymap>
+				
+						<removefrommap>
+							<name>contactos_evento</name>
+							<key><get name="evento_set"/></key>
+						</removefrommap>
+						</think>
+					
+				
+					EVENTO ELIMINADO CORRECTAMENTE
+				
+				</li>
+			</condition>
+		</li>
+	</condition>
+</template>
+</category>
+
+</topic>
+
+
+
+</aiml>

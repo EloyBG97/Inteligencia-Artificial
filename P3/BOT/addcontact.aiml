@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- Regla AÑADIR CONTACTO -->
+<category>
+	<pattern>^ [AGREG+ AÑAD+ MET+ INCORPOR+ CREA+] ^ [CONTACTO AMIG+ COMPAÑER+ CONOCID+ COLEGA] ^</pattern>
+	
+	<template>
+		<think>
+			<set name="topic">
+				ADDCONTACT
+			</set>
+		</think>
+		
+		Cuales son sus apellidos?
+	</template>
+</category>
+
+<category>
+	<pattern>^ [CONTACTO AMIG+ COMPAÑER+ CONOCID+ COLEGA] ^ [AGREG+ AÑAD+ MET+ INCORPOR+ CREA+] ^</pattern>
+	
+	<template>
+		<srai>AÑADIR <star index="2"/></srai>
+	</template>
+</category>
+
+<!-- Topic AÑADIR CONTACTO -->
+<topic name="ADDCONTACT">
+
+<category>
+	<pattern>*</pattern>
+	<that>CUALES SON SUS APELLIDOS</that>
+	<template>
+		<think>
+			<set name="lastcontact">
+				<uppercase><star/></uppercase>
+			</set>
+		</think>
+		
+		<addtoset>
+			<name>apellidos</name>
+			<value><get name="lastcontact"/></value>
+		</addtoset>
+		
+		Cual es su nombre?
+	</template>
+</category>
+
+<category>
+	<pattern>*</pattern>
+	<that>CUAL ES SU NOMBRE</that>
+	<template>
+		<addtomap>
+			<name>nombre</name>
+			<key><get name="lastcontact"/></key>
+			<value><star/></value>
+		</addtomap>
+		
+		Cual es su direccion?
+	</template>
+</category>
+
+<category>
+	<pattern>*</pattern>
+	<that>CUAL ES SU DIRECCION</that>
+	<template>
+		<addtomap>
+			<name>direccion</name>
+			<key><get name="lastcontact"/></key>
+			<value><star/></value>
+		</addtomap>
+		
+		Cual es su telefono?
+	</template>
+</category>
+
+<category>
+	<pattern>*</pattern>
+	<that>CUAL ES SU TELEFONO</that>
+	<template>
+		<think>
+			<set name="topic">
+				unknown
+			</set>
+		</think>
+		
+		<addtomap>
+			<name>telefono</name>
+			<key><get name="lastcontact"/></key>
+			<value><star/></value>
+		</addtomap>
+		
+		Contacto guardado con exito
+	</template>
+</category>
+
+</topic>
+
+
+
+</aiml>

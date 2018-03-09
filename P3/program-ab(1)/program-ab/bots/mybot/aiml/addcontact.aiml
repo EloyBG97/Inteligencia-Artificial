@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- Regla AÑADIR CONTACTO -->
+<category>
+	<pattern>^ [AGREG+ AÑAD+ MET+ INCORPOR+ CREA+ GUARD+] ^ [CONTACTO AMIG+ COMPAÑER+ CONOCID+ COLEGA CHIC+ NIÑ+] ^</pattern>
+	
+	<template>
+		<think>
+			<set name="topic">
+				ADDCONTACT
+			</set>
+		</think>
+		
+		<random>
+			<li>Cuales son sus apellidos?</li>
+			<li>Digame sus apellidos</li>
+			<li>Como se apellida?</li>
+			<li>Deme sus apellidos</li>
+			<li>Necesito sus apellidos</li>
+		</random>
+	</template>
+</category>
+
+<category>
+	<pattern>^ [CONTACTO AMIG+ COMPAÑER+ CONOCID+ COLEGA CHIC+ NIÑ+] ^ [AGREG+ AÑAD+ MET+ INCORPOR+ CREA+ GUARD+] ^</pattern>
+	
+	<template>
+		<srai>AÑADIR AMIGO</srai>
+	</template>
+</category>
+
+<!-- Topic AÑADIR CONTACTO -->
+<topic name="ADDCONTACT">
+
+<category>
+	<pattern><set>apellido</set></pattern>
+	<that>^ APELLID+ ^</that>
+	<template>
+		<think>
+			<set name="topic">
+				unknown
+			</set>
+		</think>
+			
+		<random>
+			<li>Este contacto ya esta en la lista</li>
+			<li><star/> ya fue añadido previamente</li>
+			<li>Usted ya añadio a <star/> antes</li>
+			<li>Este contacto ya existe</li>
+		</random>
+	</template>
+</category>
+
+<category>
+	<pattern>*</pattern>
+	<that>^ APELLID+ ^</that>
+	<template>
+		<think>
+			<set name="lastcontact">
+				<star/>
+			</set>
+		</think>
+		
+		<addtoset>
+			<name>apellido</name>
+			<key><get name="lastcontact"/></key>
+		</addtoset>
+		
+		<random>
+			<li>Cual es su nombre?</li>
+			<li>Como es su nombre?</li>
+			<li>Como se llama?</li>
+			<li>A que nombre responde</li>
+		</random>
+	</template>
+</category>
+
+<category>
+	<pattern>*</pattern>
+	<that>^ [NOMBRE LLAM+] ^</that>
+	<template>
+		<addtomap>
+			<name>nombre</name>
+			<key><get name="lastcontact"/></key>
+			<value><star/></value>
+		</addtomap>
+		
+		<random>
+			<li>Cual es su direccion?</li>
+			<li>Donde vive?</li>
+			<li>Cual es su domicilio?</li>
+			<li>Donde reside?</li>
+		</random>		
+	</template>
+</category>
+
+<category>
+	<pattern>*</pattern>
+	<that>(DONDE) ^ [DIRECCION DOMICILIO VIVE RESIDE] ^</that>
+	<template>
+		<addtomap>
+			<name>direccion</name>
+			<key><get name="lastcontact"/></key>
+			<value><star/></value>
+		</addtomap>
+		
+		<random>
+			<li>Cual es su telefono?</li>
+			<li>Necesito un telefono de contacto</li>
+			<li>Deme su numero de telefono</li>
+			<li>Proporcioneme un telefono de contacto</li>
+		</random>
+		
+	</template>
+</category>
+
+<category>
+	<pattern>*</pattern>
+	<that>^ TELEFONO ^</that>
+	<template>
+		<think>
+			<set name="topic">
+				unknown
+			</set>
+			
+			<modifymap>
+				<name>numero_contactos</name>
+				<key>n_contactos</key>
+				<value>
+				<map name="successor">
+					<map name="numero_contactos">n_contactos</map>
+				</map>
+				</value>
+			</modifymap>
+		</think>
+		
+		<addtomap>
+			<name>telefono</name>
+			<key><get name="lastcontact"/></key>
+			<value><star/></value>
+		</addtomap>
+		
+		<random>
+			<li>Contacto guardado con exito</li>
+			<li><get name="lastcontact"/> fue añadido correctamente</li>
+			<li>Ya esta disponible <get name="lastcontact"/> en su agenda de contactos</li>
+			<li>Ya puede acceder a <get name="lastcontact"/> desde la agenda</li>
+		</random>
+	</template>
+</category>
+
+</topic>
+
+</aiml>

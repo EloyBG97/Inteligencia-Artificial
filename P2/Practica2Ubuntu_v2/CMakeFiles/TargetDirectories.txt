@@ -1,0 +1,9 @@
+/home/eloy/Desktop/UGR/2ºCuatrimestre/Inteligencia Artificial/Practicas/P2/Practica2Ubuntu_v2/CMakeFiles/BelkanSG.dir
+/home/eloy/Desktop/UGR/2ºCuatrimestre/Inteligencia Artificial/Practicas/P2/Practica2Ubuntu_v2/CMakeFiles/Belkan.dir
+/home/eloy/Desktop/UGR/2ºCuatrimestre/Inteligencia Artificial/Practicas/P2/Practica2Ubuntu_v2/CMakeFiles/rebuild_cache.dir
+/home/eloy/Desktop/UGR/2ºCuatrimestre/Inteligencia Artificial/Practicas/P2/Practica2Ubuntu_v2/CMakeFiles/motorLib.dir
+/home/eloy/Desktop/UGR/2ºCuatrimestre/Inteligencia Artificial/Practicas/P2/Practica2Ubuntu_v2/CMakeFiles/obj3DLib.dir
+/home/eloy/Desktop/UGR/2ºCuatrimestre/Inteligencia Artificial/Practicas/P2/Practica2Ubuntu_v2/CMakeFiles/edit_cache.dir
+/home/eloy/Desktop/UGR/2ºCuatrimestre/Inteligencia Artificial/Practicas/P2/Practica2Ubuntu_v2/CMakeFiles/GLUILib.dir
+/home/eloy/Desktop/UGR/2ºCuatrimestre/Inteligencia Artificial/Practicas/P2/Practica2Ubuntu_v2/CMakeFiles/modelosBelkanLib.dir
+/home/eloy/Desktop/UGR/2ºCuatrimestre/Inteligencia Artificial/Practicas/P2/Practica2Ubuntu_v2/CMakeFiles/comportamientosLib.dir

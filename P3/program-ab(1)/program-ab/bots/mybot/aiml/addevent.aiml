@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<category>
+	<pattern>^ [AÑAD+ AGREG+] ^ [EVENTO ACTO CITA] ^</pattern>
+	<template>
+		<think>
+			<set name="topic">
+				ADDEVENT
+			</set>
+		</think>
+		
+		INTRODUCE EL NOMBRE DEL EVENTO
+	</template>
+</category>
+
+<topic name="ADDEVENT">
+
+<category>
+	<pattern>*</pattern>
+	<that>INTRODUCE EL NOMBRE DEL EVENTO</that>
+	<template>
+		<think>
+			<set name="name_event">
+				<srai>
+					ponerbarrabaja <star/>
+				</srai>
+			</set>
+		</think>
+	
+		INTRODUZCA LA FECHA
+	</template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<that>INTRODUZCA LA FECHA</that>
+<template>
+	<think>
+		<set name="date_event">
+			<srai>
+				ponerbarrabaja <srai>trata fecha <star/></srai>
+			</srai>
+		</set>
+	</think>
+	
+	<condition name="date_event">
+		<li value="0">INTRODUZCA LA FECHA</li>
+		<li>INTRODUZCA LA HORA</li>
+	</condition>
+</template>
+</category>
+
+
+
+<category>
+<pattern>*</pattern>
+<that>INTRODUZCA LA HORA</that>
+<template>
+	<think>
+		<set name="time_event">
+			<srai>
+				ponerbarrabaja <srai>trata hora <star/></srai>
+			</srai>			
+		</set>
+	</think>
+	
+	<condition name="time_event">
+		<li value="0">INTRODUZCA LA HORA</li>
+		<li>
+			<think>
+				<set name="evento_set">
+					<srai>
+						ponerbarrabaja <get name="date_event"/> <get name="time_event"/>
+					</srai>
+				</set>
+		
+				<set var="cond">
+					<srai>
+						EXISTE EVENTO <get name="evento_set"/>
+					</srai>
+				</set>
+			</think>
+			
+			<condition var="cond">
+				<li value="NO">
+					<think>
+						<addtoset>
+							<name>eventos</name>
+							<key><get name="evento_set"/></key>
+						</addtoset>
+					
+						<set var="keys_map">
+							<readkeys>nombre_evento</readkeys>
+						</set>
+					
+						<set var="cond">
+							<srai>
+								FINDITEM <get name="date_event"/> IN <get var="keys_map"/>
+							</srai>
+						</set>
+					
+					
+					<condition var="cond">
+						<li value="0">
+							<srai>GENERAR MAP FECHAHORA</srai>
+						</li>
+						
+						<li>
+				
+							<set var="evento_map">
+								<map name="nombre_evento">
+									<get name="date_event"/>
+								</map>
+							</set>
+						
+							<set var="evento_map">
+								<srai>
+									CHANGEITEM <map name="traduccion_hora"><get name="time_event"/></map> BY <get name="name_event"/> IN <get var="evento_map"/>
+								</srai>
+							</set>
+						
+							<modifymap>
+								<name>nombre_evento</name>
+								<key><get name="date_event"/></key>
+								<value><get var="evento_map"/></value>
+							</modifymap>
+					
+						</li>
+					</condition>
+					<addtomap>
+						<name>contactos_evento</name>
+						<key><get name="evento_set"/></key>
+						<value></value>
+					</addtomap>
+					
+					</think>
+					DESEA AÑADIR ALGUN CONTACTO?
+				</li>
+				
+				<li>
+					<think>
+						<set name="topic">
+							unknown
+						</set>
+					</think>
+						YA EXISTE UN EVENTO PROGRAMADO PARA ESA FECHA Y HORA
+					
+				</li>
+			</condition>
+		</li>
+	</condition>
+</template>
+</category>
+
+<category>
+<pattern>^ SI ^</pattern>
+<that>DESEA AÑADIR ALGUN CONTACTO</that>
+<template>
+DIGAME LOS APELLIDOS DEL CONTACTO QUE DESEA AÑADIR AL EVENTO
+</template>
+</category>
+
+<category>
+<pattern>^ NO ^</pattern>
+<that>DESEA AÑADIR ALGUN CONTACTO</that>
+<template>
+	<think>
+		<set name="topic">
+			unknown
+		</set>
+	</think>
+	EVENTO CREADO CORRECTAMENTE
+</template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<that>DIGAME LOS APELLIDOS DEL CONTACTO QUE DESEA AÑADIR AL EVENTO</that>
+<template>
+	<think>
+		<set var="cond">
+			<srai>AÑADE CONTACTO A EVENTO <star/></srai>
+		</set>
+	</think>
+	<condition var="cond">
+		<li value="NO">
+			<think>
+				<set name="topic">
+					unknown
+				</set>
+			</think>
+			EL CONTACTO QUE DESEA AÑADIR NO ESTA EN LA AGENDA
+		</li>
+		
+		<li>
+			DESEA AÑADIR ALGUN CONTACTO?
+		</li>
+	</condition>
+</template>
+</category>
+
+
+<category>
+<pattern> GENERAR MAP FECHAHORA</pattern>
+<template>
+	<think>
+		<set var="counter">
+			1
+		</set>
+		
+		
+		
+		<set var="evento_map">
+			null
+		</set>
+		
+		<condition var="counter">
+			<li value="48">
+				<set var="evento_map">
+					<srai>
+						CHANGEITEM <map name="traduccion_hora"><get name="time_event"/></map> BY <get name="name_event"/> IN <get var="evento_map"/>
+					</srai>
+				</set>	
+			</li>
+			<li>
+				<set var="evento_map">
+					<get var="evento_map"/> null
+				</set>
+				
+				<set var="counter">
+					<map name="successor">
+						<get var="counter"/>
+					</map>
+				</set>
+				<loop/>
+			</li>
+		</condition>
+		
+		<addtomap>
+			<name>nombre_evento</name>
+			<key><get name="date_event"/></key>
+			<value><get var="evento_map"/></value>
+		</addtomap>
+	</think>
+</template>
+</category>
+				
+
+</topic>
+
+</aiml>
+	

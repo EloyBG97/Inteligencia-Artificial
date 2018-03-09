@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<category>
+<pattern>EXISTE EVENTO *</pattern>
+<template>
+	<think>
+		<set var="lista_eventos">
+			<readset>eventos</readset>
+		</set>
+		
+		<set var="cond">
+			<srai>
+				FINDITEM <star/> IN <get var="lista_eventos"/>
+			</srai>
+		</set>
+	</think>
+
+	<condition var="cond">
+		<li value="0">NO</li>
+		<li>YES</li>
+	</condition>
+
+</template>
+</category>
+
+<category>
+<pattern>AÑADE CONTACTO A EVENTO * </pattern>
+<template>
+	
+		<set var="cond">
+			<srai>EXISTE CONTACTO <star index="1"/></srai>
+		</set>
+				
+	<condition var="cond">
+		<li value="0">
+			NO
+		</li>
+		<li>
+			<set var="lista_contactos">
+				<map name="contactos_evento"><get name="evento_set"/></map>
+			</set>
+			
+			<modifymap>
+				<name>contactos_evento</name>
+				<key><get name="evento_set"/></key>
+				<value><get var="lista_contactos"/> <star/></value>
+			</modifymap>
+			
+			YES
+		</li>
+	</condition>
+</template>
+</category>
+
+</aiml>

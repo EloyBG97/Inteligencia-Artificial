@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- Regla CONSULTAR CONTACTOS -->
+<category>
+	<pattern>^ QUE * [CONTACTOS AMIG+ COMPAÑER+ CONOCID+ COLEGAS] ^</pattern>
+	
+	<template>
+	
+		<think>
+			<set name="topic">
+				GETCONTACT
+			</set>
+		</think>
+		
+	</template>
+</category>
+
+<!-- Topic CONSULTAR CONTACTO -->
+<topic name="GETCONTACT">
+</topic>
+
+</aiml>

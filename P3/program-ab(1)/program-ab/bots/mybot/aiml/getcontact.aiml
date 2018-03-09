@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+
+<category>
+	<pattern>^ [DIRECCION DOMICILIO] DE <set>apellido</set> </pattern>
+	<template>
+		LA DIRECCION DE <star index="2"/> ES <map name="direccion"><star index="2"/></map>
+	</template>
+</category>
+
+<category>
+	<pattern>^ [TELEFONO] DE <set>apellido</set> </pattern>
+	<template>
+		EL NUMERO DE <star index="2"/> ES <map name="telefono"><star index="2"/></map>
+	</template>
+</category>
+
+<category>
+	<pattern>^ [NOMBRE] DE <set>apellido</set> </pattern>
+	<template>
+		EL NOMBRE DE <star index="2"/> ES <map name="nombre"><star index="2"/></map>
+	</template>
+</category>
+
+<category>
+	<pattern>^ [TELEFONO DIRECCION DOMICILIO NOMBRE] DE * </pattern>
+	<template>
+		NO EXISTE EL CONTACTO <star index="2"/>
+	</template>
+</category>
+
+<category>
+	<pattern> ^ CUANTOS ^ [AMIG+ COMPAÑER+ CONTACT+ COLEGAS] ^ [GUARD+ ALMACEN+] ^</pattern>
+	<template>TIENES <map name="numero_contactos">n_contactos</map> CONTACTOS AÑADIDOS EN LA AGENDA</template>
+</category>
+
+<category>
+	<pattern> ^ CUAL ^ (ULTIMO) ^ [AMIG+ COMPAÑER+ CONTACT+ COLEGA] ^ [GUARD+ ALMACEN+] ^</pattern>
+	<template>EL ULTIMO CONTACTO ALMACENADO FUE <get name="lastcontact"/></template>
+</category>
+
+<category>
+	<pattern> ^ [LIST+] ^ [AMIG+ COMPAÑER+ CONTACT+ COLEGAS]  ^</pattern>
+	<template>		
+		<think>	
+			<set var="lista">
+				<readkeys>nombre</readkeys>
+			</set>
+		</think>
+		
+		ESTOS SON LOS CONTACTOS ALMACENADOS:
+		<get var="lista"/>
+	</template>
+</category>
+
+</aiml>

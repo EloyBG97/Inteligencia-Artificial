@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- Regla ELIMINAR CONTACTO -->
+<category>
+	<pattern>^ [BORR+ ELIMIN+ QUIT+] ^ [CONTACTO AMIG+ COMPAÑER+ CONOCID+ COLEGA CHIC+ NIÑ+] ^</pattern>
+	
+	<template>
+	
+		<think>
+			<set name="topic">
+				ERASECONTACT
+			</set>
+		</think>
+		
+		Cuales son sus apellidos?
+	</template>
+</category>
+
+<category>
+	<pattern>^ [CONTACTO AMIG+ COMPAÑER+ CONOCID+ COLEGA CHIC+ NIÑ+] ^ [BORR+ ELIMIN+ QUIT+] ^</pattern>
+	
+	<template>
+		<srai>ELIMINAR CONTACTO</srai>
+	</template>
+</category>
+
+<!-- Topic ELIMINAR CONTACTO -->
+<topic name="ERASECONTACT">
+
+<category>
+	<pattern><set>apellido</set></pattern>
+	<that>CUALES SON SUS APELLIDOS</that>
+	<template>
+		<think>
+			<set name="eliminado">
+				<star/>
+			</set>
+		</think>
+		Esta seguro
+	</template>
+</category>
+
+<category>
+	<pattern>^ SI ^</pattern>
+	<that>CUALES SON SUS APELLIDOS</that>
+	<template>
+		<think>
+			<removefromset>
+				<name>apellido</name>
+				<key><lowercase><star/></lowercase></key>
+			</removefromset>
+			
+			<removefrommap>
+				<name>nombre</name>
+				<key><lowercase><star/></lowercase></key>
+			</removefrommap>
+			
+			<removefrommap>
+				<name>telefono</name>
+				<key><lowercase><star/></lowercase></key>
+			</removefrommap>
+			
+			<removefrommap>
+				<name>direccion</name>
+				<key><lowercase><star/></lowercase></key>
+			</removefrommap>
+			
+			<modifymap>
+				<name>numero_contactos</name>
+				<key>n_contactos</key>
+				<value>
+				<map name="predecessor">
+					<map name="numero_contactos">n_contactos</map>
+				</map>
+				</value>
+			</modifymap>
+			
+			<set name="topic">
+				unknow
+			</set>
+		</think>
+					
+		Ese contacto ya no esta en la lista
+	</template>
+</category>
+
+<category>
+	<pattern>^ NO ^</pattern>
+	<that>CUALES SON SUS APELLIDOS</that>
+	<template>NO TENDRE EN CUENTA ESTA ORDEN ENTONCES</template>
+</category>
+
+</topic>
+
+</aiml>

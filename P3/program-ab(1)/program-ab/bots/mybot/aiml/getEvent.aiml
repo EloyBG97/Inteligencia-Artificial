@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<category>
+<pattern>^ QUE ^ [CONTACT+ AMIG+] ^ [ASOCIAD+ VINCUL+] ^ [EVENTO]</pattern>
+<template>
+	<think>
+		<set name="topic">
+			GETCONTACT_E
+		</set>
+	</think>
+	
+	INTRUDUZCA LA FECHA
+</template>
+</category>
+
+
+<category>
+<pattern>^ [EVENT+] ^ [TENG+] ^ [DIA FECHA]</pattern>
+<template>
+	<think>
+		<set name="topic">
+			GETEVENT
+		</set>
+	</think>
+	
+	INTRUDUZCA LA FECHA
+</template>
+</category>
+
+<topic name="GETEVENT">
+<category>
+<pattern>*</pattern>
+<that>INTRUDUZCA LA FECHA</that>
+<template>
+	<set name="event_set">
+		<map name="nombre_evento">
+			<star/>
+		</map>
+	</set>
+		
+	<set var="eventos">
+		UNKNOWN
+	</set>
+	
+	<set var="cond">
+		<srai>ITERATE <get name="event_set"/></srai>
+	</set>
+	
+	<condition var="cond">
+		<li value="$"></li>
+		
+		<li>
+			<set var="eventos">
+				<get var="eventos"/> <get var="cond"/>
+			</set>
+					
+			<set var="cond">
+				<srai>ITERATE <get name="event_set"/></srai>
+			</set>
+		<loop/>
+		</li>
+	</condition>
+	
+	<think>
+		<set name="topic">
+			UNKNOWN
+		</set>
+	</think>
+	
+	TIENE ESTOS EVENTOS PLANEADOS PARA EL DIA <star/>:
+	<get var="eventos"/>
+</template>
+</category>
+
+</topic>
+
+<topic name="GETCONTACT_E">
+
+<category>
+<pattern>*</pattern>
+<that>INTRUDUZCA LA FECHA</that>
+<template>
+	<think>
+		<set name="date_event">
+			<srai>
+				ponerbarrabaja <srai>trata fecha <star/></srai>
+			</srai>
+		</set>
+	</think>
+	
+	<condition name="date_event">
+		<li value="0">INTRODUZCA LA FECHA</li>
+		<li>INTRODUZCA LA HORA</li>
+	</condition>
+</template>
+</category>
+
+
+
+<category>
+<pattern>*</pattern>
+<that>INTRODUZCA LA HORA</that>
+<template>
+	<think>
+		<set name="time_event">
+			<srai>
+				ponerbarrabaja <srai>trata hora <star/></srai>
+			</srai>			
+		</set>
+	</think>
+	
+	<condition name="time_event">
+		<li value="0">INTRODUZCA LA HORA</li>
+		<li>
+			<think>
+				<set name="evento_set">
+					<srai>
+						ponerbarrabaja <get name="date_event"/> <get name="time_event"/>
+					</srai>
+				</set>
+		
+				<set var="cond">
+					<srai>
+						EXISTE EVENTO <get name="evento_set"/>
+					</srai>
+				</set>
+			</think>
+			
+			<condition var="cond">
+				<li value="NO">
+					NO EXISTE EVENTO
+				</li>
+				
+				<li>
+						<think>
+						<set var="contactos">
+							<map name="contactos_evento"><get name="evento_set"/></map>
+						</set>
+					</think>
+					LOS CONTACTOS ASOCIADOS CON ESTE EVENTO SON: <get var="contactos"/>
+				</li>
+			</condition>
+		</li>
+	</condition>
+	
+		<think>
+			<set name="topic">
+				UNKNOWN
+			</set>
+		</think>
+</template>
+</category>
+
+</topic>
+
+</aiml>
+					

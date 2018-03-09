@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+
+
+<category>
+<pattern>FORMATEAR FECHA * * *</pattern>
+<template>
+	<think>
+		<set var="dia">
+			<star index="1"/>
+		</set>
+		
+		<set var="aux_dia">
+			<srai>
+				TOP <srai>deletrea <get var="dia"/></srai>
+			</srai>
+		</set>
+	
+		<condition var="aux_dia">
+			<li value="0">
+				<set var="dia">
+					<srai>REMOVEITEM 1 IN <srai>deletrea <get var="dia"/></srai></srai>
+				</set>
+			</li>
+		</condition>
+		
+		<set var="mes">
+			<star index="2"/>
+		</set>
+		
+		<set var="aux_mes">
+			<srai>
+				TOP <srai>deletrea <get var="mes"/></srai>
+			</srai>
+		</set>
+	
+		<condition var="aux_mes">
+			<li value="0">
+				<set var="mes">
+					<srai>REMOVEITEM 1 IN <srai>deletrea <get var="mes"/></srai></srai>
+				</set>
+			</li>
+		</condition>
+	</think>
+	
+	<get var="dia"/> <get var="mes"/> <star index="3"/>
+	
+</template>
+</category>
+
+<category>
+<pattern>fecha sin separadores *</pattern>
+<template>
+	<think>		
+		<set var="items">
+			<srai>deletrea <star/></srai>
+		</set>
+		
+		<set var="n_letras">
+			<srai>COUNT <get var="items"/></srai>
+		</set>
+		
+	</think>
+	
+		<condition var="n_letras">
+			<li value="10">
+				<think>
+					<set var="dia">
+						<srai>SELECTITEM 1 IN <get var="items"/></srai><srai>SELECTITEM 2 IN <get var="items"/></srai>
+					</set>
+			
+					<set var="mes">
+						<srai>SELECTITEM 4 IN <get var="items"/></srai><srai>SELECTITEM 5 IN <get var="items"/></srai>
+					</set>
+			
+					<set var="anio">
+						<srai>SELECTITEM 7 IN <get var="items"/></srai><srai>SELECTITEM 8 IN <get var="items"/></srai><srai>SELECTITEM 9 IN <get var="items"/></srai><srai>SELECTITEM 10 IN <get var="items"/></srai>
+					</set>
+				</think>
+				<get var="dia"/> <get var="mes"/> <get var="anio"/>
+			</li>
+			<li>0</li>
+		</condition>
+</template>
+</category>
+
+<category>
+<pattern>verifica fecha * * *</pattern>
+<template>
+	<think>
+		<set var="lista_dias">
+			<readset>dia_valido</readset>
+		</set>
+		
+		<set var="lista_meses">
+			<readset>mes_valido</readset>
+		</set>
+		
+		<set var="lista_anios">
+			<readset>anio_valido</readset>
+		</set>
+		
+		<set var="valido">
+			<srai> FINDITEM <star index="1"/> IN <get var="lista_dias"/> </srai>
+			<srai> FINDITEM <star index="2"/> IN <get var="lista_meses"/> </srai>
+			<srai> FINDITEM <star index="3"/> IN <get var="lista_anios"/> </srai>
+		</set>
+		
+		<set var="valido">
+			<srai> FINDITEM 0 IN <get var="valido"/> </srai>
+		</set>
+	</think>
+		
+	<condition var="valido">
+		<li value="0">VALIDA</li>
+		<li>NO VALIDA</li>
+	</condition>
+</template>
+</category>
+
+<category>
+<pattern>trata fecha *</pattern>
+<template>
+	<think>
+	<set var="aux">
+		<srai>fecha sin separadores <star/></srai>
+	</set>
+	
+	<set var="fecha">
+		<get var="aux"/>
+	</set>
+	</think>
+	
+	<condition var="aux">
+		<li value="0">0</li>
+		
+		<li>
+			<think>
+			<set var="aux">
+				<srai>verifica fecha <get var="fecha"/></srai>
+			</set>
+			</think>
+			
+			<condition var="aux">
+				<li value="NO VALIDA">0</li>
+				<li>
+					<think>
+					<set var="aux">
+						<srai>VALIDDATE <srai>FORMATEAR FECHA <get var="fecha"/></srai></srai>
+					</set>
+					</think>
+					
+					<condition var="aux">
+						<li value="YES"><get var="fecha"/></li>
+						<li>0</li>
+					</condition>
+				</li>
+			</condition>
+		</li>
+	</condition>
+</template>
+</category>
+
+<category>
+<pattern>hora sin separadores *</pattern>
+<template>
+	<think>		
+		<set var="items">
+			<srai>deletrea <star/></srai>
+		</set>
+		
+		<set var="n_letras">
+			<srai>COUNT <get var="items"/></srai>
+		</set>
+		
+	</think>
+	
+		<condition var="n_letras">
+			<li value="5">
+				<think>
+					<set var="hora">
+						<srai>SELECTITEM 1 IN <get var="items"/></srai><srai>SELECTITEM 2 IN <get var="items"/></srai>
+					</set>
+			
+					<set var="min">
+						<srai>SELECTITEM 4 IN <get var="items"/></srai><srai>SELECTITEM 5 IN <get var="items"/></srai>
+					</set>
+				</think>
+				<get var="hora"/> <get var="min"/>
+			</li>
+			<li>0</li>
+		</condition>
+</template>
+</category>
+
+<category>
+<pattern>verifica hora * *</pattern>
+<template>
+	<think>
+		<set var="lista_horas">
+			<readset>hora_valida</readset>
+		</set>
+		
+		<set var="lista_min">
+			<readset>min_valido</readset>
+		</set>
+		
+		<set var="valido">
+			<srai> FINDITEM <star index="1"/> IN <get var="lista_horas"/> </srai>
+			<srai> FINDITEM <star index="2"/> IN <get var="lista_min"/> </srai>
+		</set>
+		
+		<set var="valido">
+			<srai> FINDITEM 0 IN <get var="valido"/> </srai>
+		</set>
+	</think>
+		
+	<condition var="valido">
+		<li value="0">VALIDA</li>
+		<li>NO VALIDA</li>
+	</condition>
+</template>
+</category>
+
+<category>
+<pattern>trata hora *</pattern>
+<template>
+	<think>
+	<set var="aux">
+		<srai>hora sin separadores <star/></srai>
+	</set>
+	
+	<set var="hora">
+		<get var="aux"/>
+	</set>
+	</think>
+	
+	<condition var="aux">
+		<li value="0">0</li>
+		
+		<li>
+			<think>
+			<set var="aux">
+				<srai>verifica hora <get var="hora"/></srai>
+			</set>
+			</think>
+			
+			<condition var="aux">
+				<li value="NO VALIDA">0</li>
+				<li>
+					<get var="hora"/>
+				</li>
+			</condition>
+		</li>
+	</condition>
+</template>
+</category>	
+
+</aiml>

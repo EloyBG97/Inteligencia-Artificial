@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- Presentacion -->
+
+<!-- Regla ME LLAMO ... -->
+<category>
+	<pattern>^ SOY *</pattern>
+
+	<template>
+		<think>
+			<set name="user">
+				<star index="2"/>
+			</set>
+		</think>
+		
+		<random>
+			<li>Hola <get name="user"/>, mi nombre es <bot name="name"/></li>
+			<li>Encantado <get name="user"/>, yo soy <bot name="name"/></li>
+			<li>Yo soy <bot name="name"/>, encantado de conocerte <get name="user"/></li>
+			<li>Hola <get name="user"/>,yo me llamo <bot name="name"/></li>
+		</random>
+	</template>
+</category>
+
+<category>
+	<pattern>^ ME LLAMO *</pattern>
+	
+	<template>
+		<srai>
+			SOY <star index="2"/>
+		</srai>
+	</template>
+</category>
+
+<category>
+	<pattern>^ MI NOMBRE ES *</pattern>
+	
+	<template>
+		<srai>
+			SOY <star index="2"/>
+		</srai>
+	</template>
+</category>
+
+<!-- Regla CONSULTAR MI IDENTIDAD -->
+<category>
+	<pattern>^ QUIEN SOY ^</pattern>
+	
+	<template>
+		<condition name="user">
+			<li value="unknown">
+				<random>
+					<li>Aun no me has dicho tu nombre</li>
+					<li>Desconozco tu nombre</li>
+					<li>No lo se</li>
+					<li>No lo recuerdo, refrescame la memoria</li>
+				</random>
+			</li>
+			<li>
+				<random>
+					<li>¿No te acuerdas de ti mismo? Eres <get name="user"/></li>
+					<li>Tu eres <get name="user"/></li>
+					<li>Eres un poco despistado, te llamas <get name="user"/></li>
+					<li>Te refrescare la memoria, tu nombre es <get name="user"/></li>
+				</random>
+			</li>
+		</condition>
+	</template>
+</category>
+
+</aiml>

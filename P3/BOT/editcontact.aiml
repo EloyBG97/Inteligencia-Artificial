@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- Regla MODIFICAR CONTACTO -->
+<category>
+	<pattern>^ [MODIFI+ EDIT+] ^ [CONTACTO AMIG+ COMPAÑER+ CONOCID+ COLEGA] ^</pattern>
+	
+	<template>
+	
+		<think>
+			<set name="topic">
+				EDITCONTACT
+			</set>
+		</think>
+		
+		¿Cuales son sus apellidos?
+	</template>
+</category>
+
+<category>
+	<pattern>^ [CONTACTO AMIG+ COMPAÑER+ CONOCID+ COLEGA] ^ [MODIFI+ EDIT+] ^</pattern>
+	
+	<template>
+		<srai>MODIFICAR CONTACTO</srai>
+	</template>
+</category>
+
+
+<!-- Topic MODIFICAR CONTACTO -->
+<topic name="EDITCONTACT">
+</topic>
+
+</aiml>

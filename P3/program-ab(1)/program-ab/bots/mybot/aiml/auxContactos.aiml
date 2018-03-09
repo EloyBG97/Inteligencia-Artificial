@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<category>
+<pattern>EXISTE CONTACTO *</pattern>
+<template>
+	<think>
+		<set var="lista_contactos">
+			<readset>apellido</readset>
+		</set>
+		
+		<set var="cond">
+			<srai>
+				FINDITEM <star/> IN <get var="lista_contactos"/>
+			</srai>
+		</set>
+	</think>
+
+	<condition var="cond">
+		<li value="0">NO</li>
+		<li>YES</li>
+	</condition>
+	
+	
+</template>
+</category>
+
+</aiml>

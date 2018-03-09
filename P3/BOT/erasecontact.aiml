@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- Regla ELIMINAR CONTACTO -->
+<category>
+	<pattern>^ [BORR+ ELIMIN+ QUIT+] ^ [CONTACTO AMIG+ COMPAÑER+ CONOCID+ COLEGA] ^</pattern>
+	
+	<template>
+	
+		<think>
+			<set name="topic">
+				ERASECONTACT
+			</set>
+		</think>
+		
+		¿Cuales son sus apellidos?
+	</template>
+</category>
+
+<category>
+	<pattern>^ [CONTACTO AMIG+ COMPAÑER+ CONOCID+ COLEGA] ^ [BORR+ ELIMIN+ QUIT+] ^</pattern>
+	
+	<template>
+		<srai>ELIMINAR CONTACTO</srai>
+	</template>
+</category>
+
+<!-- Topic ELIMINAR CONTACTO -->
+<topic name="ERASECONTACT">
+</topic>
+
+</aiml>
